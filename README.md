@@ -1,25 +1,25 @@
 # Gestor de Proyectos Kanban
 
-## Instrucciones
+MVP de tablero Kanban: 5 columnas renombrables, tarjetas con título y detalles, arrastrar y soltar, agregar y eliminar tarjetas. Sin persistencia. Requisitos completos en `AGENTS.md`.
 
-Este es un proyecto base para tu proyecto Kanban de la Semana 1 del Curso Completo de Programación en IA. Consulta los recursos del curso para obtener más información.
+Stack: Next.js, React, Tailwind CSS, dnd-kit, Vitest, Playwright.
 
-Debes clonar este repositorio en tu directorio de proyectos con:
+## Uso
 
-`git clone https://github.com/joanby/kanban.git`
+Requiere Node.js 20 o superior.
 
-Luego, modifica el archivo AGENTS.md antes de usarlo en tu Agente de Codificación preferido.
+```
+cd frontend
+npm install
+npm run dev
+```
 
-Si no tienes Git instalado, puedes [instalarlo aquí](https://git-scm.com/install/) y es posible que necesites reiniciar el equipo después.
+Abrir http://localhost:3000.
 
-## Contribuir con tu archivo AGENTS.md
+## Pruebas
 
-Si has sugerido cambios en AGENTS.md que te han funcionado bien, ¡compártelos para que otros estudiantes se beneficien! Sigue las instrucciones del enlace [aquí](https://edwarddonner.com/pr) para crear una solicitud de extracción (PR) y añadirla a community_contributions. Nombra tu archivo algo como JUAN_GABRIEL_AGENTS.md, pero con tu nombre.
-
-¡Tengo muchas ganas de ver tus cambios!
-
-## Publicación de tu app
-
-Cuando hayas creado con éxito una app Kanban, si quieres publicarla en LinkedIn y etiquetarme, la compartiré para dar a conocer tu éxito y que tus logros sean más visibles.
-
-Si ves a otros estudiantes haciendo esto, por favor, comparte tu apoyo y ánimo. Es muy útil para la comunidad que nos apoyemos mutuamente.
+```
+npm test                          # unitarias y de componentes (Vitest)
+npx playwright install chromium   # solo la primera vez
+npm run test:e2e                  # integración (Playwright)
+```
