@@ -10,6 +10,6 @@
 }
 
 body {
-  background: #f4f6fa;
+  background: linear-gradient(180deg, #f6f8fc 0%, #eef2f8 100%) fixed;
   color: #1f2937;
 }

@@ -37,6 +37,14 @@ describe("addCard", () => {
   });
 });
 
+describe("editCard", () => {
+  it("cambia el título y los detalles sin mover la tarjeta", () => {
+    const s = boardReducer(makeState(), { type: "editCard", cardId: "2", title: "Nuevo", details: "Detalle" });
+    expect(s.cards["2"]).toEqual({ id: "2", title: "Nuevo", details: "Detalle" });
+    expect(ids(s, "a")).toEqual(["1", "2", "3"]);
+  });
+});
+
 describe("deleteCard", () => {
   it("quita la tarjeta de su columna y del mapa", () => {
     const s = boardReducer(makeState(), { type: "deleteCard", cardId: "2" });
@@ -80,6 +88,7 @@ describe("inmutabilidad", () => {
     const snapshot = structuredClone(original);
     boardReducer(original, { type: "renameColumn", columnId: "a", title: "X" });
     boardReducer(original, { type: "addCard", columnId: "a", card: { id: "9", title: "N", details: "" } });
+    boardReducer(original, { type: "editCard", cardId: "1", title: "E", details: "" });
     boardReducer(original, { type: "deleteCard", cardId: "1" });
     boardReducer(original, { type: "moveCard", cardId: "1", toColumnId: "b", toIndex: 0 });
     expect(original).toEqual(snapshot);

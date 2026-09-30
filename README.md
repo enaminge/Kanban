@@ -1,8 +1,8 @@
 # Gestor de Proyectos Kanban
 
-MVP de tablero Kanban: 5 columnas renombrables, tarjetas con título y detalles, arrastrar y soltar, agregar y eliminar tarjetas. Sin persistencia. Requisitos completos en `AGENTS.md`.
+MVP de tablero Kanban: 5 columnas renombrables, tarjetas con título y detalles, arrastrar y soltar, agregar, editar y eliminar tarjetas, y un asistente de chat que maneja el tablero con instrucciones en lenguaje natural. Interfaz en español y adaptable a teléfono, tableta y escritorio. Sin persistencia. Requisitos completos en `AGENTS.md`.
 
-Stack: Next.js, React, Tailwind CSS, dnd-kit, Vitest, Playwright.
+Stack: Next.js, React, Tailwind CSS, dnd-kit, OpenRouter, Vitest, Playwright.
 
 ## Uso
 
@@ -15,6 +15,12 @@ npm run dev
 ```
 
 Abrir http://localhost:3000.
+
+Para el asistente, crear `frontend/.env.local` con una clave de OpenRouter:
+
+```
+OPENROUTER_API_KEY=...
+```
 
 ## Pruebas
 

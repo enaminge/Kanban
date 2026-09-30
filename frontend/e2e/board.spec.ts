@@ -30,7 +30,7 @@ test("carga el tablero con 5 columnas y datos de ejemplo", async ({ page }) => {
 });
 
 test("renombra una columna", async ({ page }) => {
-  await page.getByRole("button", { name: "Por hacer" }).click();
+  await column(page, "todo").getByRole("button", { name: "Por hacer" }).click();
   await page.getByLabel("Nombre de la columna").fill("Siguiente");
   await page.keyboard.press("Enter");
   await expect(column(page, "todo").getByRole("button", { name: "Siguiente" })).toBeVisible();
@@ -44,6 +44,17 @@ test("agrega una tarjeta", async ({ page }) => {
   await page.getByRole("button", { name: "Agregar", exact: true }).click();
   await expect(cardTitles(col)).toHaveText(["Implementar tablero Kanban", "Escribir pruebas"]);
   await expect(col.getByText("Unitarias y e2e")).toBeVisible();
+});
+
+test("edita una tarjeta", async ({ page }) => {
+  const card = page.getByTestId("card-c5");
+  await card.hover();
+  await card.getByRole("button", { name: "Editar Implementar tablero Kanban" }).click();
+  await page.getByLabel("Título de la tarjeta").fill("Pulir tablero");
+  await page.getByLabel("Detalles de la tarjeta").fill("Ajustes finales");
+  await page.getByRole("button", { name: "Guardar" }).click();
+  await expect(cardTitles(column(page, "progress"))).toHaveText(["Pulir tablero"]);
+  await expect(card.getByText("Ajustes finales")).toBeVisible();
 });
 
 test("elimina una tarjeta", async ({ page }) => {
@@ -66,7 +77,7 @@ test("arrastra una tarjeta a una columna vacía", async ({ page }) => {
   await expect(column(page, "review").getByRole("listitem")).toHaveCount(0);
   await drag(page, page.getByTestId("card-c3"), column(page, "review").getByRole("list"));
   await expect(cardTitles(column(page, "review"))).toHaveText(["Diseñar pantalla de inicio"]);
-  await expect(cardTitles(column(page, "todo"))).toHaveText(["Redactar textos de onboarding"]);
+  await expect(cardTitles(column(page, "todo"))).toHaveText(["Redactar textos de bienvenida"]);
 });
 
 test("reordena tarjetas dentro de una columna", async ({ page }) => {
@@ -75,4 +86,45 @@ test("reordena tarjetas dentro de una columna", async ({ page }) => {
     "Reunión de arranque",
     "Configurar repositorio",
   ]);
+});
+
+test.describe("asistente", () => {
+  const mockChat = (page: Page, acciones: object[]) =>
+    page.route("**/api/chat", (route) =>
+      route.fulfill({ json: { text: JSON.stringify({ respuesta: "Listo, tablero actualizado.", acciones }) } }),
+    );
+
+  test("maneja el tablero con un mensaje", async ({ page }) => {
+    await mockChat(page, [
+      { tipo: "agregar", columna: "todo", titulo: "Preparar demo", detalles: "" },
+      { tipo: "mover", tarjeta: "c6", columna: "done", posicion: 1 },
+      { tipo: "renombrar", columna: "backlog", titulo: "Ideas" },
+    ]);
+    await page.getByLabel("Mensaje para el asistente").fill("Organiza el tablero");
+    await page.getByRole("button", { name: "Enviar" }).click();
+
+    await expect(page.getByTestId("chat-assistant")).toContainText("Listo, tablero actualizado.");
+    await expect(page.getByTestId("chat-assistant")).toContainText("3 cambios aplicados");
+    await expect(cardTitles(column(page, "todo"))).toContainText(["Preparar demo"]);
+    await expect(cardTitles(column(page, "done")).first()).toHaveText("Revisar accesibilidad");
+    await expect(column(page, "backlog").getByRole("button", { name: "Ideas" })).toBeVisible();
+  });
+
+  test("en un teléfono el asistente se abre y se cierra sobre el tablero", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await mockChat(page, [{ tipo: "eliminar", tarjeta: "c1" }]);
+    const input = page.getByLabel("Mensaje para el asistente");
+    await expect(input).toBeHidden();
+
+    await page.getByRole("button", { name: "Asistente" }).click();
+    await input.fill("Elimina Investigar competidores");
+    await page.getByRole("button", { name: "Enviar" }).click();
+    await expect(page.getByTestId("chat-assistant")).toContainText("1 cambio aplicado");
+
+    await page.getByRole("button", { name: "Cerrar asistente" }).click();
+    await expect(input).toBeHidden();
+    await expect(page.getByRole("listitem")).toHaveCount(7);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+    expect(overflow).toBe(false);
+  });
 });

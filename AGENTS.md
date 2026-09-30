@@ -7,7 +7,9 @@
 - El tablero tiene 5 columnas fijas que se pueden renombrar.
 - Cada tarjeta tiene solo un título y detalles.
 - Interfaz de arrastrar y soltar para mover tarjetas entre columnas.
-- Agregar una nueva tarjeta a una columna; eliminar una tarjeta existente.
+- Agregar una nueva tarjeta a una columna; editar el título y los detalles de una tarjeta; eliminar una tarjeta existente.
+- Un chat al costado derecho permite manejar el tablero con instrucciones en lenguaje natural (agregar, editar, mover y eliminar tarjetas, renombrar columnas).
+- Interfaz totalmente en español y adaptada a cualquier dispositivo.
 - Sin funcionalidades adicionales: sin archivo, sin búsqueda ni filtrado. Que sea simple. - La prioridad es una interfaz de usuario (UI/UX) elegante, profesional y atractiva, con funciones muy sencillas.
 - La aplicación debe abrirse con datos de ejemplo para el tablero único.
 

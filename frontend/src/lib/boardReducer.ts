@@ -3,6 +3,7 @@ import type { BoardState, Card } from "./types";
 export type BoardAction =
   | { type: "renameColumn"; columnId: string; title: string }
   | { type: "addCard"; columnId: string; card: Card }
+  | { type: "editCard"; cardId: string; title: string; details: string }
   | { type: "deleteCard"; cardId: string }
   | { type: "moveCard"; cardId: string; toColumnId: string; toIndex: number };
 
@@ -26,6 +27,15 @@ export function boardReducer(state: BoardState, action: BoardAction): BoardState
           c.id === action.columnId ? { ...c, cardIds: [...c.cardIds, action.card.id] } : c,
         ),
         cards: { ...state.cards, [action.card.id]: action.card },
+      };
+
+    case "editCard":
+      return {
+        ...state,
+        cards: {
+          ...state.cards,
+          [action.cardId]: { id: action.cardId, title: action.title, details: action.details },
+        },
       };
 
     case "deleteCard": {

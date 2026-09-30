@@ -9,7 +9,7 @@ const geistSans = Geist({
 
 export const metadata: Metadata = {
   title: "Tablero Kanban",
-  description: "Gestor de proyectos Kanban",
+  description: "Gestor de proyectos Kanban con asistente",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
